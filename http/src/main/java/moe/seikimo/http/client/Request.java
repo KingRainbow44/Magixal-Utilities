@@ -1,21 +1,24 @@
 package moe.seikimo.http.client;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import moe.seikimo.general.EncodingUtils;
 import moe.seikimo.general.FileUtils;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter @Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Request {
     private static final List<String> METHODS = List.of(
             "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"
@@ -39,15 +42,54 @@ public final class Request {
         }
     }
 
-    private final String url, method;
-    private final Object body;
-    private final Map<String, String> headers;
+    private URI url;
+    private String method;
+    private byte[] body;
+    private Map<String, String> headers;
+    private final ResponseType response;
+
+    /**
+     * Creates an HTTP request for use by Java.
+     *
+     * @return The request.
+     */
+    public HttpRequest convert() {
+        // Create a new request.
+        var builder = HttpRequest.newBuilder().uri(this.url);
+
+        // Apply the body and method.
+        if (this.body != null) {
+            builder = builder
+                    .method(this.method, BodyPublishers.ofByteArray(this.body));
+        } else {
+            builder = builder.method(this.method, BodyPublishers.noBody());
+        }
+
+        // Apply the headers.
+        for (var entry : this.headers.entrySet()) {
+            builder = builder.header(entry.getKey(), entry.getValue());
+        }
+
+        return builder.build();
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum ResponseType {
+        STRING(BodyHandlers.ofString()),
+        BYTES(BodyHandlers.ofByteArray()),
+        FILE(BodyHandlers.ofInputStream());
+
+        final HttpResponse.BodyHandler<?> handler;
+    }
 
     @Setter
     @Accessors(chain = true, fluent = true)
     public static final class Builder {
-        private String url, method;
-        private Object body = null;
+        private String url, method = "GET";
+        private byte[] body = null;
+        private ResponseType responseType
+                = ResponseType.STRING;
 
         private final Map<String, String> headers
                 = new HashMap<>();
@@ -81,7 +123,7 @@ public final class Request {
          * @return The builder.
          */
         public Request.Builder addBodyJson(Object body) {
-            this.body = EncodingUtils.jsonEncode(body);
+            this.body = EncodingUtils.jsonEncode(body).getBytes();
             this.headers.put("Content-Type", "application/json");
             return this;
         }
@@ -105,7 +147,7 @@ public final class Request {
             // Remove the last ampersand.
             builder.deleteCharAt(builder.length() - 1);
 
-            this.body = builder.toString();
+            this.body = builder.toString().getBytes();
             this.headers.put("Content-Type", "application/x-www-form-urlencoded");
             return this;
         }
@@ -118,7 +160,7 @@ public final class Request {
          * @return The builder.
          */
         public Request.Builder addBody(String body) {
-            this.body = body;
+            this.body = body.getBytes();
             this.headers.put("Content-Type", "text/plain");
             return this;
         }
@@ -154,13 +196,11 @@ public final class Request {
          *
          * @return The request.
          */
+        @SneakyThrows
         public Request build() {
             // Validate the URL.
             if (this.url == null || this.url.isEmpty()) {
                 throw new IllegalStateException("URL cannot be null.");
-            }
-            if (!Request.isValidUrl(this.url)) {
-                throw new IllegalStateException("URL cannot be empty.");
             }
 
             // Validate the method.
@@ -175,7 +215,8 @@ public final class Request {
                 throw new IllegalStateException("Method requires a body.");
             }
 
-            return new Request(this.url, this.method, this.body, this.headers);
+            return new Request(new URI(this.url), this.method,
+                    this.body, this.headers, this.responseType);
         }
     }
 }
