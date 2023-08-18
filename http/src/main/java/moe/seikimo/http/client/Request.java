@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ToString
 @Getter @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Request {
@@ -27,26 +28,24 @@ public final class Request {
             "POST", "PUT", "DELETE", "PATCH"
     );
 
-    /**
-     * Checks if a URL is valid.
-     *
-     * @param url The URL.
-     * @return Whether the URL is valid.
-     */
-    private static boolean isValidUrl(String url) {
-        try {
-            new URL(url);
-            return true;
-        } catch (MalformedURLException e) {
-            return false;
-        }
-    }
-
     private URI url;
     private String method;
     private byte[] body;
     private Map<String, String> headers;
     private final ResponseType response;
+
+    /**
+     * Adds a header to the request.
+     * This will overwrite any existing headers with the same name.
+     *
+     * @param name The name of the header.
+     * @param value The value of the header.
+     * @return The request.
+     */
+    public Request addHeader(String name, String value) {
+        this.headers.put(name, value);
+        return this;
+    }
 
     /**
      * Creates an HTTP request for use by Java.

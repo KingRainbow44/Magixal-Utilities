@@ -1,5 +1,7 @@
 package moe.seikimo.http.client;
 
+import lombok.SneakyThrows;
+
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.ArrayList;
@@ -25,8 +27,8 @@ public final class HttpClient2 {
      *
      * @param request The request.
      */
-    public Response execute(Request request)
-            throws IOException, InterruptedException {
+    @SneakyThrows
+    public Response execute(Request request) {
         // Apply middleware.
         for (var interceptor : this.middleware) {
             interceptor.intercept(request);
