@@ -11,6 +11,11 @@
 
     <modules>
         <module>http</module>
+        <module>data</module>
+        <module>console</module>
+        <module>lua</module>
+        <module>js</module>
+        <module>handler</module>
     </modules>
 
     <properties>
@@ -39,6 +44,13 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
