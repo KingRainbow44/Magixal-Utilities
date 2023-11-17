@@ -16,6 +16,7 @@
         <module>lua</module>
         <module>js</module>
         <module>handler</module>
+        <module>common</module>
     </modules>
 
     <properties>
