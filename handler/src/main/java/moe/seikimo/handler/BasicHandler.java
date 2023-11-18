@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class BasicHandler<D> {
-    private final Map<Class<D>, DataHandler<D>> handlers = new HashMap<>();
+    private final Map<Class<? extends D>, DataHandler<? extends D>> handlers = new HashMap<>();
 
     /**
      * Registers a handler.
@@ -12,7 +12,7 @@ public final class BasicHandler<D> {
      * @param clazz The class.
      * @param handler The handler.
      */
-    public void register(Class<D> clazz, DataHandler<D> handler) {
+    public void register(Class<? extends D> clazz, DataHandler<? extends D> handler) {
         this.handlers.put(clazz, handler);
     }
 

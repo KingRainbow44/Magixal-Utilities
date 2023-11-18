@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ObjectHandler<O extends DataReceiver, D> {
-    private final Map<Class<D>, ObjectDataHandler<O, D>> handlers = new HashMap<>();
+    private final Map<Class<? extends D>, ObjectDataHandler<O, ? extends D>> handlers = new HashMap<>();
 
     /**
      * Registers a handler.
@@ -12,7 +12,7 @@ public final class ObjectHandler<O extends DataReceiver, D> {
      * @param clazz The class.
      * @param handler The handler.
      */
-    public void register(Class<D> clazz, ObjectDataHandler<O, D> handler) {
+    public void register(Class<? extends D> clazz, ObjectDataHandler<O, ? extends D> handler) {
         this.handlers.put(clazz, handler);
     }
 
