@@ -6,9 +6,7 @@ import moe.seikimo.general.EncodingUtils;
 import moe.seikimo.general.FileUtils;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
