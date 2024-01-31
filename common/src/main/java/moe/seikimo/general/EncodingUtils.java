@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,6 +53,18 @@ public interface EncodingUtils {
     static <T> T jsonDecode(File file, Class<T> type)
             throws IOException {
         return JSON.get().fromJson(new FileReader(file), type);
+    }
+
+    /**
+     * Uses a reader for JSON contents.
+     * Converts the JSON to an object.
+     *
+     * @param reader The reader to pull data from.
+     * @param type The type of the object.
+     * @return The object.
+     */
+    static <T> T jsonDecode(Reader reader, Class<T> type) {
+        return JSON.get().fromJson(reader, type);
     }
 
     /**
