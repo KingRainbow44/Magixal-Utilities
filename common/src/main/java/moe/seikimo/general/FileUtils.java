@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -104,5 +105,52 @@ public interface FileUtils {
         }
 
         stream.closeEntry(); // Close the entry.
+    }
+
+    /**
+     * Recursively deletes a directory.
+     *
+     * @param file The directory.
+     */
+    static void deleteDirectory(File file) throws IOException {
+        FileUtils.deleteDirectory(file.toPath());
+    }
+
+    /**
+     * Recursively deletes a directory.
+     *
+     * @param path The directory.
+     */
+    static void deleteDirectory(Path path) throws IOException {
+        FileUtils.clearContents(path.toFile());
+        Files.deleteIfExists(path);
+    }
+
+    /**
+     * Copies a directory to another directory.
+     *
+     * @param source The source directory.
+     * @param destination The destination directory.
+     * @throws IOException If an error occurs.
+     */
+    static void copyDirectory(File source, File destination) throws IOException {
+        if (source.isDirectory()) {
+            if (!destination.exists() && !destination.mkdirs()) {
+                throw new IOException("Failed to create directory: " + destination);
+            }
+
+            var files = source.list();
+            if (files == null) {
+                throw new IOException("Failed to list files in directory: " + source);
+            }
+
+            for (var file : files) {
+                var srcFile = new File(source, file);
+                var destFile = new File(destination, file);
+                FileUtils.copyDirectory(srcFile, destFile);
+            }
+        } else {
+            Files.copy(source.toPath(), destination.toPath());
+        }
     }
 }
