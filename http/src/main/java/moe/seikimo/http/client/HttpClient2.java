@@ -2,7 +2,6 @@ package moe.seikimo.http.client;
 
 import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
