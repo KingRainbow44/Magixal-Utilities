@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -50,6 +51,30 @@ public interface FileUtils {
      */
     static byte[] readFile(String parent, String child) {
         return FileUtils.readFile(new File(parent, child));
+    }
+
+    /**
+     * Reads all lines from a file.
+     *
+     * @param file The file.
+     * @return The lines.
+     */
+    static List<String> readLines(File file) {
+        try {
+            return Files.readAllLines(file.toPath());
+        } catch (IOException ignored) {
+            return List.of();
+        }
+    }
+
+    /**
+     * Reads all lines from a file.
+     *
+     * @param path The path.
+     * @return The lines.
+     */
+    static List<String> readLines(String path) {
+        return FileUtils.readLines(new File(path));
     }
 
     /**
