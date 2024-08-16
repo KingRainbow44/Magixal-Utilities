@@ -1,7 +1,7 @@
 package moe.seikimo.handler;
 
 @SuppressWarnings("unchecked")
-public interface ObjectDataHandler<O extends DataReceiver, D> {
+public interface ObjectDataHandler<O, D> {
     /**
      * Public facing method for handling data.
      *
