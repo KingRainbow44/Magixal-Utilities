@@ -17,6 +17,8 @@
     <file url="file://$PROJECT_DIR$/js/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/lua/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/lua/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

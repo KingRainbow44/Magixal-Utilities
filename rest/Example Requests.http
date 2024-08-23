@@ -1,0 +1,14 @@
+### Hello World!
+GET http://localhost:8080/
+
+### Parameter Loopback
+GET http://localhost:8080/route/some%20param
+
+### HTTP operation handling
+POST http://localhost:8080/response
+
+### Not Found handling
+PUT http://localhost:8080/not-found
+
+### Custom response data
+PUT http://localhost:8080/update

@@ -17,6 +17,7 @@
         <module>js</module>
         <module>handler</module>
         <module>common</module>
+        <module>rest</module>
     </modules>
 
     <properties>
@@ -36,7 +37,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.8</version>
+            <version>1.4.12</version>
             <scope>compile</scope>
         </dependency>
 
